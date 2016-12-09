@@ -1,0 +1,23 @@
+@import 'base';
+
+main {
+	max-width: $content-width;
+  margin: 0 auto;
+	color: $font-color;
+  display: flex column;
+	background-color: $bg-color;
+	text-align: center;
+	h1 {
+		font-size: $header-size;
+	}
+	ul {
+		list-style-type: none;
+		padding: 0;
+	}
+	img {
+		width: 60%;
+		height: auto;
+		display: block;
+		margin: 0 auto;
+	}
+}
