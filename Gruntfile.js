@@ -47,6 +47,17 @@ module.exports = function (grunt) {
         }]
       }
     },
+    autoprefixer: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'dist/css',
+          src: ['**/*.css', '!**/*.min.css'],
+          dest: 'dist/css',
+          ext: '.css'
+        }]
+      }
+    },
     htmlmin: {                                     // Task
       dist: {                                      // Target
         options: {                                 // Target options
@@ -127,6 +138,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   // grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
@@ -141,7 +153,7 @@ module.exports = function (grunt) {
   // Register the "css" task.
   grunt.registerTask('html', ['clean:html', 'htmlmin']);
   // Register the "css" task.
-  grunt.registerTask('css', ['clean:css', 'sass', 'cssmin']);
+  grunt.registerTask('css', ['clean:css', 'sass', 'autoprefixer', 'cssmin']);
   // Register the "js" task.
   grunt.registerTask('js', ['clean:js', 'jshint', 'uglify']);
   // Alias the "compile" task to run "css" and "js".
