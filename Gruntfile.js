@@ -8,6 +8,32 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     // Tasks
+    autoprefixer: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'dist/css',
+          src: ['**/*.css', '!**/*.min.css'],
+          dest: 'dist/css',
+          ext: '.css'
+        }]
+      }
+    },
+    babel: {
+      options: {
+        // sourceMap: true,
+        presets: ['es2015']
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'src/js/',
+          src: ['**/*.js', '!**/*.min.js'],
+          dest: 'dist/js/compiled/',
+          ext: '.js'
+        }]
+      }
+    },
     clean: {
       html: ['dist/*.html'],
       css: ['dist/css/*'],
@@ -26,7 +52,7 @@ module.exports = function (grunt) {
       options: {
         separator: ';',
         stripBanners: true,
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */'
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today(mm-dd-yyyy") %> */'
       },
       dist: {
         src: ['src/**/*.js'],
@@ -44,17 +70,6 @@ module.exports = function (grunt) {
           src: ['**/*.css', '!**/*.min.css'],
           dest: 'dist/css',
           ext: '.min.css'
-        }]
-      }
-    },
-    autoprefixer: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: 'dist/css',
-          src: ['**/*.css', '!**/*.min.css'],
-          dest: 'dist/css',
-          ext: '.css'
         }]
       }
     },
@@ -85,6 +100,7 @@ module.exports = function (grunt) {
     jshint: {
       options: {
         reporter: require('jshint-stylish'),
+        esversion: 6,
         curly: true,
         eqeqeq: true,
         eqnull: true,
@@ -111,14 +127,15 @@ module.exports = function (grunt) {
     },
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+        banner: '/* Travis Shields <%= grunt.template.today("mm-dd-yyyy") %> */\n'
+        // banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
       },
       dist: {
         files: [{
           expand: true,
-          cwd: 'src/js/',
+          cwd: 'dist/js/compiled/',
           src: ['**/*.js', '!**/*.min.js'],
-          dest: 'dist/js/',
+          dest: 'dist/js/min/',
           ext: '.min.js'
         }]
       }
@@ -135,10 +152,11 @@ module.exports = function (grunt) {
   });
 
   // Load Grunt plugins
+  grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  // grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
@@ -155,7 +173,7 @@ module.exports = function (grunt) {
   // Register the "css" task.
   grunt.registerTask('css', ['clean:css', 'sass', 'autoprefixer', 'cssmin']);
   // Register the "js" task.
-  grunt.registerTask('js', ['clean:js', 'jshint', 'uglify']);
+  grunt.registerTask('js', ['clean:js', 'jshint', 'babel', 'uglify']);
   // Alias the "compile" task to run "css" and "js".
   grunt.registerTask('compile', ['img', 'html', 'css', 'js']);
   // Alias the "default" task to "compile".
